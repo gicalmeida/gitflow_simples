@@ -1,16 +1,27 @@
 package br.edu.ifsp.bra.poliscientia.Model;
 
-import java.util.ArrayList;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
+@Entity
 public class Aluno {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id_aluno;
+    
     private String nome;
     private int idade;
     private String email_aluno;
     private String escola;
     private String senha;
-    private int id_aluno;
+    
 
-    public Aluno(String nome, int idade, String email_aluno, String escola, int id_aluno) {
+    public Aluno(){
+    }
+
+    public Aluno(String nome, int idade, String email_aluno, String escola, Long id_aluno) {
         this.nome = nome;
         this.idade = idade;
         this.email_aluno = email_aluno;
@@ -58,11 +69,11 @@ public class Aluno {
         this.senha = senha;
     }
 
-    public int getId_aluno() {
+    public Long getId_aluno() {
         return id_aluno;
     }
 
-    public void setId_aluno(int id_aluno) {
+    public void setId_aluno(Long id_aluno) {
         this.id_aluno = id_aluno;
     }
 

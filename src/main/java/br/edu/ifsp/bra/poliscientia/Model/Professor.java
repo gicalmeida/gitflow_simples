@@ -1,11 +1,20 @@
 package br.edu.ifsp.bra.poliscientia.Model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity
 public class Professor {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id_professor;
+
     private String nome_professor;
     private String email_professor;
     private int idade;
     private String escola;
-    private int id_professor;
     
     public String getNome_professor() {
         return nome_professor;
