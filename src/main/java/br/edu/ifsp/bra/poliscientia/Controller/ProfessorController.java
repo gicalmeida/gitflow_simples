@@ -28,24 +28,17 @@ public class ProfessorController {
     @Autowired
     ProfessorRepository professorRepository;
 
+    @Autowired
     AlunoRepository alunoRepository;
-
-    ArrayList<Aluno> listaAlunos = new ArrayList<>();
-
-    
-   /*  public ProfessorController() {
-        listaAlunos.add(new Aluno("Giovana", 17, "giovana@gmail.com", "IFSP-BRA", 12345L));
-        listaAlunos.add(new Aluno("Franciele", 18, "franciele@gmail.com", "IFSP-BRA", 67890L));
-    }*/
 
     @GetMapping("/api/professor/listaDeAlunos")
     public List<Aluno> getAllAluno() {
-        return (List<Aluno>)alunoRepository.findAll();
+        return (List<Aluno>) alunoRepository.findAll();
     }
 
     @GetMapping("/api/professor/buscarAluno/{id_aluno}")
-    public Aluno getProfessorById(@PathVariable("id_aluno")int id_aluno){
-        return alunoRepository.findById((long) id_aluno).get();
+    public Aluno getProfessorById(@PathVariable("id_aluno")Long id_aluno){
+        return alunoRepository.findById((long) id_aluno).orElse(null);
     }
 
     @PostMapping("/api/professor")
@@ -53,32 +46,35 @@ public class ProfessorController {
     return professorRepository.save(professor);
     }
 
+    //testar
     @PutMapping("/api/adicionarAluno/{id_aluno}")
     public ResponseEntity<Aluno> putMethodName(@PathVariable("id_aluno") Long id_aluno, @RequestBody Aluno aluno) {
         Optional<Aluno> alunoExistente = alunoRepository.findById(id_aluno);
-        
+    
         if (alunoExistente.isPresent()) {
-            // Atualiza o aluno existente
             Aluno alunoAtualizado = alunoExistente.get();
             alunoAtualizado.setNome(aluno.getNome());
-            alunoAtualizado.setEmail_aluno(aluno.getEmail_aluno());
             alunoAtualizado.setIdade(aluno.getIdade());
+            alunoAtualizado.setEmail_aluno(aluno.getEmail_aluno());
             alunoAtualizado.setEscola(aluno.getEscola());
-            alunoAtualizado.setSenha(aluno.getSenha());
+            alunoAtualizado.setPontuacao_total(aluno.getPontuacao_total());
 
-            Aluno alunoSalvo = alunoRepository.save(alunoAtualizado); // Salva as alterações no banco de dados
-            return ResponseEntity.ok(alunoSalvo); // Retorna 200 OK com o aluno atualizado
+            alunoRepository.save(alunoAtualizado);
+            
+            return ResponseEntity.ok(alunoAtualizado); 
         } else {
-            // Cria um novo aluno, se não encontrado
-            aluno.setId_aluno(id_aluno); // Define o ID para o novo aluno
-            Aluno novoAluno = alunoRepository.save(aluno); // Salva o novo aluno no banco de dados
-            return ResponseEntity.status(HttpStatus.CREATED).body(novoAluno); // Retorna 201 Created com o novo aluno
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); 
         }
-    }
-
-    /*@DeleteMapping ("/api/removerAluno/{email_aluno}")
-    public Aluno ()*/
-
-
+     }
+    
+     //testar
+    @DeleteMapping("/api/removerAluno/{id_aluno}")
+        public ResponseEntity<Void> deleteAluno(@PathVariable("id_aluno") Long id_aluno) {
+            if (alunoRepository.existsById(id_aluno)) {
+                alunoRepository.deleteById(id_aluno);
+                return ResponseEntity.noContent().build();
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+        }
 }
-

@@ -1,25 +1,50 @@
 package br.edu.ifsp.bra.poliscientia.Model;
 
-public class Pontuacao {
-    private int questoesCertas;
-    private int questoesErradas;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
-    /*@Entity
+@Entity
 public class Pontuacao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id_pontuacao;
 
-    private Long idAluno;
-    private int idFase;
-    private int pontuacao;
+    private int questoesCertas;
+    private int questoesErradas;
 
-    // Getters e Setters
-}
-    @Repository
-public interface PontuacaoRepository extends JpaRepository<Pontuacao, Long> {
-    Optional<Pontuacao> findByIdAlunoAndIdFase(Long idAluno, int idFase);
-}
+    public Pontuacao() {
+    }
 
- */
+    public Pontuacao(int id_pontuacao, int questoesCertas, int questoesErradas) {
+        this.id_pontuacao = id_pontuacao;
+        this.questoesCertas = questoesCertas;
+        this.questoesErradas = questoesErradas;
+    }
+
+    public int getId_pontuacao() {
+        return id_pontuacao;
+    }
+
+    public void setId_pontuacao(int id_pontuacao) {
+        this.id_pontuacao = id_pontuacao;
+    }
+
+    public int getQuestoesCertas() {
+        return questoesCertas;
+    }
+
+    public void setQuestoesCertas(int questoesCertas) {
+        this.questoesCertas = questoesCertas;
+    }
+
+    public int getQuestoesErradas() {
+        return questoesErradas;
+    }
+
+    public void setQuestoesErradas(int questoesErradas) {
+        this.questoesErradas = questoesErradas;
+    }
+
 }

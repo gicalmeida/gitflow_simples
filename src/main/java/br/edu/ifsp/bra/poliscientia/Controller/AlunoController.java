@@ -13,13 +13,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.edu.ifsp.bra.poliscientia.Model.Aluno;
+import br.edu.ifsp.bra.poliscientia.Model.Pontuacao;
 import br.edu.ifsp.bra.poliscientia.Model.Professor;
 import br.edu.ifsp.bra.poliscientia.repository.AlunoRepository;
+import br.edu.ifsp.bra.poliscientia.repository.PontuacaoRepository;
 
 @RestController
 public class AlunoController {
     @Autowired
     AlunoRepository alunoRepository;
+    PontuacaoRepository pontuacaoRepository;
 
     @GetMapping("/api/aluno/{id}/pontuacaoTotal")
     public int getPontuacaoTotal(@PathVariable Long id) {
@@ -28,7 +31,7 @@ public class AlunoController {
     }
 
     
-    /*@GetMapping("/api/aluno/pontuacao/{id_aluno}/{id_fase}")
+   /*  @GetMapping("/api/aluno/pontuacao/{id_aluno}/{id_fase}")
     public ResponseEntity<Pontuacao> getPontuacao(@PathVariable("id_aluno") Long id_aluno, 
                                                     @PathVariable("id_fase") int id_fase) {
         Optional<Pontuacao> pontuacao = pontuacaoRepository.findByIdAlunoAndIdFase(id_aluno, id_fase);

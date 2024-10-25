@@ -16,7 +16,7 @@
         private String email_aluno;
         private String escola;
         private String senha;
-        private int pontuacao_total = 1000;
+        private int pontuacao_total;
 
         public Aluno(){
         }
