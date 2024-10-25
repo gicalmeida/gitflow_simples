@@ -1,6 +1,5 @@
 package br.edu.ifsp.bra.poliscientia.Controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,15 +11,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PutMapping;
 
-import br.edu.ifsp.bra.poliscientia.Model.Aluno;
 import br.edu.ifsp.bra.poliscientia.Model.Professor;
+import br.edu.ifsp.bra.poliscientia.Model.SalaVirtual;
 import br.edu.ifsp.bra.poliscientia.repository.ProfessorRepository;
-import br.edu.ifsp.bra.poliscientia.repository.AlunoRepository;
-
 
 
 @RestController
@@ -28,53 +24,54 @@ public class ProfessorController {
     @Autowired
     ProfessorRepository professorRepository;
 
-    @Autowired
-    AlunoRepository alunoRepository;
 
-    @GetMapping("/api/professor/listaDeAlunos")
-    public List<Aluno> getAllAluno() {
-        return (List<Aluno>) alunoRepository.findAll();
+    @GetMapping("/professor/listaDeProfessores")
+    public List<Professor> getAllProfessor() {
+        return (List<Professor>) professorRepository.findAll();
     }
 
-    @GetMapping("/api/professor/buscarAluno/{id_aluno}")
-    public Aluno getProfessorById(@PathVariable("id_aluno")Long id_aluno){
-        return alunoRepository.findById((long) id_aluno).orElse(null);
+    @GetMapping("/professor/buscarProfessor/{id_professor}")
+    public Professor getProfessorById(@PathVariable("id_professor")int id_professor){
+        return professorRepository.findById(id_professor).orElse(null);
     }
 
-    @PostMapping("/api/professor")
+    @PostMapping("/professor")
     public Professor createProfessor(@RequestBody Professor professor){
-    return professorRepository.save(professor);
+        List<SalaVirtual> salasVirtuais = professor.getSala();
+        for(SalaVirtual salaVirtual : salasVirtuais){
+            salaVirtual.setProfessor(professor);
+        }
+        return professorRepository.save(professor);
     }
 
     //testar
-    @PutMapping("/api/adicionarAluno/{id_aluno}")
-    public ResponseEntity<Aluno> putMethodName(@PathVariable("id_aluno") Long id_aluno, @RequestBody Aluno aluno) {
-        Optional<Aluno> alunoExistente = alunoRepository.findById(id_aluno);
+    @PutMapping("/professor/adicionarProfessor/{id_professor}")
+    public ResponseEntity<Professor> putMethodName(@PathVariable("id_professor") int id_professor, @RequestBody Professor professor) {
+        Optional<Professor> professorExistente = professorRepository.findById(id_professor);
     
-        if (alunoExistente.isPresent()) {
-            Aluno alunoAtualizado = alunoExistente.get();
-            alunoAtualizado.setNome(aluno.getNome());
-            alunoAtualizado.setIdade(aluno.getIdade());
-            alunoAtualizado.setEmail_aluno(aluno.getEmail_aluno());
-            alunoAtualizado.setEscola(aluno.getEscola());
-            alunoAtualizado.setPontuacao_total(aluno.getPontuacao_total());
+        if (professorExistente.isPresent()) {
+            Professor professorAtualizado = professorExistente.get();
+            professorAtualizado.setNome_professor(professor.getNome_professor());
+            professorAtualizado.setEmail_professor(professor.getEmail_professor());
+            professorAtualizado.setIdade(professor.getIdade());
+            professorAtualizado.setEscola(professor.getEscola());
 
-            alunoRepository.save(alunoAtualizado);
+            professorRepository.save(professorAtualizado);
             
-            return ResponseEntity.ok(alunoAtualizado); 
+            return ResponseEntity.ok(professorAtualizado); 
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); 
         }
      }
     
      //testar
-    @DeleteMapping("/api/removerAluno/{id_aluno}")
-        public ResponseEntity<Void> deleteAluno(@PathVariable("id_aluno") Long id_aluno) {
-            if (alunoRepository.existsById(id_aluno)) {
-                alunoRepository.deleteById(id_aluno);
-                return ResponseEntity.noContent().build();
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            }
+    @DeleteMapping("/removerProfessor/{id_professor}")
+        public ResponseEntity<Void> deleteProfessor(@PathVariable("id_professor") int id_professor){
+                if (professorRepository.existsById(id_professor)) {
+                    professorRepository.deleteById(id_professor);
+                    return ResponseEntity.noContent().build();
+                } else {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+                }
         }
 }
