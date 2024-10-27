@@ -1,2 +1,5 @@
 # gitflow_simples
-Repositório para testa um GitFlow simples.
+Trabalho de LTP
+Integrantes:
+Franciele de Souza Meira
+Giovana da Cunha Almeida

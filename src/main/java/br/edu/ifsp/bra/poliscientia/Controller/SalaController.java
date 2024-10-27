@@ -22,47 +22,50 @@ public class SalaController {
     @Autowired
     SalaRepository salaRepository;
 
+
     @GetMapping("/sala/listaSalas")
     public List<SalaVirtual> getAllSalaVirtual() {
         return (List<SalaVirtual>) salaRepository.findAll();
     }
 
     @GetMapping("/sala/buscarSala/{id_sala}")
-    public SalaVirtual getProfessorById(@PathVariable("id_sala") int id_sala){
+    public SalaVirtual getProfessorById(@PathVariable("id_sala") int id_sala) {
         return salaRepository.findById(id_sala).orElse(null);
     }
 
+    //com erro: 
+    //quando crio a sala, mesmo colcoando os dados do professor, o campo fica como nulo
     @PostMapping("/sala")
-    public SalaVirtual createSalaVirtual(@RequestBody SalaVirtual salaVirtual){
-        return salaRepository.save(salaVirtual);
+     public SalaVirtual createSalaVirtual(@RequestBody SalaVirtual salaVirtual) {
+     return salaRepository.save(salaVirtual);
     }
 
-    @PutMapping("/adicionarSala/{id_sala}")
-    public ResponseEntity<SalaVirtual> putMethodName(@PathVariable("id_sala") int id_sala, @RequestBody SalaVirtual sala) {
+    @PutMapping("/sala/editarSala/{id_sala}")
+    public ResponseEntity<SalaVirtual> putMethodName(@PathVariable("id_sala") int id_sala,
+            @RequestBody SalaVirtual sala) {
         Optional<SalaVirtual> salaExistente = salaRepository.findById(id_sala);
-    
+
         if (salaExistente.isPresent()) {
             SalaVirtual salaAtualizada = salaExistente.get();
             salaAtualizada.setNome(sala.getNome());
             salaAtualizada.setDescricao(sala.getDescricao());
 
             salaRepository.save(salaAtualizada);
-            
-            return ResponseEntity.ok(salaAtualizada); 
+
+            return ResponseEntity.ok(salaAtualizada);
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); 
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
-     }
-    
-     //testar
-    @DeleteMapping("/removerSala/{id_sala}")
-        public ResponseEntity<Void> deleteProfessor(@PathVariable("id_sala") int id_sala){
-                if (salaRepository.existsById(id_sala)) {
-                    salaRepository.deleteById(id_sala);
-                    return ResponseEntity.noContent().build();
-                } else {
-                    return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-                }
+    }
+
+    @DeleteMapping("/sala/removerSala/{id_sala}")
+    public ResponseEntity<Void> deleteProfessor(@PathVariable("id_sala") int id_sala) {
+        if (salaRepository.existsById(id_sala)) {
+            salaRepository.deleteById(id_sala);
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+    }
 
 }
