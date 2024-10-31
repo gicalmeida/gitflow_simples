@@ -14,14 +14,17 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.edu.ifsp.bra.poliscientia.Model.Professor;
 import br.edu.ifsp.bra.poliscientia.Model.SalaVirtual;
+import br.edu.ifsp.bra.poliscientia.repository.ProfessorRepository;
 import br.edu.ifsp.bra.poliscientia.repository.SalaRepository;
 
 @RestController
 public class SalaController {
     @Autowired
     SalaRepository salaRepository;
-
+    @Autowired
+    ProfessorRepository professorRepository;
 
     @GetMapping("/sala/listaSalas")
     public List<SalaVirtual> getAllSalaVirtual() {
@@ -37,6 +40,9 @@ public class SalaController {
     //quando crio a sala, mesmo colcoando os dados do professor, o campo fica como nulo
     @PostMapping("/sala")
      public SalaVirtual createSalaVirtual(@RequestBody SalaVirtual salaVirtual) {
+     int idProfessor = salaVirtual.getProfessor().getId_professor();
+     Professor prof = professorRepository.findById(idProfessor).get();
+     salaVirtual.setProfessor(prof);
      return salaRepository.save(salaVirtual);
     }
 

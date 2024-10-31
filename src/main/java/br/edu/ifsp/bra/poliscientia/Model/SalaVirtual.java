@@ -1,7 +1,6 @@
 package br.edu.ifsp.bra.poliscientia.Model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,15 +18,14 @@ public class SalaVirtual {
     private String descricao;
 
     @ManyToOne
-    @JsonIgnore
+    @JsonBackReference
     @JoinColumn(name = "id_professor")
     private Professor professor;
 
     SalaVirtual(){
     }
 
-    public SalaVirtual(int id_sala, String nome, String descricao) {
-        this.id_sala = id_sala;
+    public SalaVirtual(String nome, String descricao) {
         this.nome = nome;
         this.descricao = descricao;
     }
