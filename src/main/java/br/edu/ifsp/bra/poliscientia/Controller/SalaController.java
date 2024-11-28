@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +21,7 @@ import br.edu.ifsp.bra.poliscientia.repository.ProfessorRepository;
 import br.edu.ifsp.bra.poliscientia.repository.SalaRepository;
 
 @RestController
+@CrossOrigin({ "*" })
 public class SalaController {
     @Autowired
     SalaRepository salaRepository;
@@ -36,14 +38,22 @@ public class SalaController {
         return salaRepository.findById(id_sala).orElse(null);
     }
 
-    //com erro: 
-    //quando crio a sala, mesmo colcoando os dados do professor, o campo fica como nulo
     @PostMapping("/sala")
-     public SalaVirtual createSalaVirtual(@RequestBody SalaVirtual salaVirtual) {
-     int idProfessor = salaVirtual.getProfessor().getId_professor();
-     Professor prof = professorRepository.findById(idProfessor).get();
-     salaVirtual.setProfessor(prof);
-     return salaRepository.save(salaVirtual);
+    public SalaVirtual createSalaVirtual(@RequestBody SalaVirtual salaVirtualRequest) {
+        // Criando o professor diretamente a partir dos dados recebidos
+        Professor professor = salaVirtualRequest.getProfessor();
+
+        // Salvando o professor no banco de dados
+        professor = professorRepository.save(professor);
+
+        // Criando a sala
+        SalaVirtual salaVirtual = new SalaVirtual();
+        salaVirtual.setNome(salaVirtualRequest.getNome());
+        salaVirtual.setDescricao(salaVirtualRequest.getDescricao());
+        salaVirtual.setProfessor(professor); // Associando o professor à sala
+
+        // Salvando a sala no banco de dados
+        return salaRepository.save(salaVirtual);
     }
 
     @PutMapping("/sala/editarSala/{id_sala}")

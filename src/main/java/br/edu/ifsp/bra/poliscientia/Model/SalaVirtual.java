@@ -22,7 +22,7 @@ public class SalaVirtual {
     @JoinColumn(name = "id_professor")
     private Professor professor;
 
-    SalaVirtual(){
+    public SalaVirtual(){
     }
 
     public SalaVirtual(String nome, String descricao) {

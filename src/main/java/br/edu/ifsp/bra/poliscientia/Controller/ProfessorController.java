@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +20,7 @@ import br.edu.ifsp.bra.poliscientia.Model.SalaVirtual;
 import br.edu.ifsp.bra.poliscientia.repository.ProfessorRepository;
 
 @RestController
+@CrossOrigin({"*"})
 public class ProfessorController {
     @Autowired
     ProfessorRepository professorRepository;
@@ -36,10 +38,10 @@ public class ProfessorController {
     @PostMapping("/professor")
     public Professor createProfessor(@RequestBody Professor professor) {
         List<SalaVirtual> salasVirtuais = professor.getSala();
-        for (SalaVirtual salaVirtual : salasVirtuais) {
-            salaVirtual.setProfessor(professor);
-        }
-        return professorRepository.save(professor);
+    for (SalaVirtual salaVirtual : salasVirtuais) {
+        salaVirtual.setProfessor(professor);  // Associando a sala ao professor
+    }
+    return professorRepository.save(professor);  // Salva o professor com a lista de salas
     }
 
     @PutMapping("/professor/editarProfessor/{id_professor}")
